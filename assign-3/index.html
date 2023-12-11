@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fetch Data Example</title>
+</head>
+
+<body>
+  <button id="myButton" onclick="fetchData()">Fetch Data</button>
+  <ul id="resultList"></ul>
+
+  <script>
+    function displayError(message) {
+      document.getElementById("resultList").textContent = `Error: ${message}`;
+    }
+
+    function fetchData() {
+      const apiUrl = "https://jsonplaceholder.typicode.com/todos";
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          const resultList = document.getElementById("resultList");
+          resultList.innerHTML = "";
+          data.forEach(item => {
+            const listItem = document.createElement("li");
+            listItem.textContent = JSON.stringify(item, null, 2);
+            resultList.appendChild(listItem);
+          });
+        })
+        .catch(error => {
+          displayError(error.message);
+        });
+    }
+  </script>
+</body>
+
+</html>
